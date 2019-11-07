@@ -40,7 +40,7 @@ html
                     div
                         img(src='img/user2.png')
                         span #{username}
-                        a( onclick='onLogout(event)' class='main__logout' ) Logout
+                        a( class='main__logout' ) Logout
             .main_search
                 form(action='' method='')#search
                     input(type='text' placeholder='tim kiem...' )
@@ -110,14 +110,14 @@ html
                 $('.home__modal').css('display','none');
             }
         })();
-        function onLogout(e){
-            event.preventDefault();
-            $.get("/logout",function(data){
-                if(data.code === 200){
-                    window.location.href = "/";
-                }
-            });
-        };
+        //- function onLogout(e){
+        //-     event.preventDefault();
+        //-     $.get("/logout",function(data){
+        //-         if(data.code === 200){
+        //-             window.location.href = "/";
+        //-         }
+        //-     });
+        //- };
         function onBuy(id){
             $.post("/buy",{
                 id: id
@@ -136,13 +136,30 @@ html
             setTimeout(_=>{
                 $(".loadingpage").css('display','none');
             },1600);
-            $("#search input").on("keyup",function(){
-                var value = $(this).val().toLowerCase();
-                $(".main__listproduct .product").filter(function(){
-                    return $(this).toggle( $(this).find("p").text().toLowerCase().indexOf(value) != -1  );
+            //- $("#search input").on("keyup",function(){
+            //-     var value = $(this).val().toLowerCase();
+            //-     $(".main__listproduct .product").filter(function(){
+            //-         return $(this).toggle( $(this).find("p").text().toLowerCase().indexOf(value) != -1  );
+            //-     });
+            //- });
+            $("#search input").on("keyup",function(){ 
+                let $list = $('.main__listproduct .product'),
+                    $text = $(this).val().toLowerCase();
+                $list.isotope({
+                    itemSelector :'.product'
                 });
+                var isotope = $list.data('isotope');
+                //- var prod = $list.filter(function(){
+                //-     $(this).find("p").text().toLowerCase().indexOf($text) != -1 ; 
+                //- }).addClass('filter');
+                for( let i = 0 ; i < $list.length;i++ ){
+                    //- console.log( $($list[i]).find("p").text() );
+                    //- console.log($($list[i]).find("p").text().indexOf($text) != -1  );
+                    
+                }
+
             });
-            $(".main_user").click(_=>{
+            $(".main_user img").click(_=>{
                 window.location.href = "/checkout";
             });
         });

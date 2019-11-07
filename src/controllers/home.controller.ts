@@ -72,7 +72,6 @@ export class HomeController {
             if (error) {
                 console.log(error);
             } else {
-                res.clearCookie('userid');
                 res.json({
                     code: 200,
                     message: 'đã logout',

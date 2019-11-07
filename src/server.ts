@@ -33,7 +33,7 @@ app.use(expressSession({
     // tslint:disable-next-line: object-literal-sort-keys
     resave: true,
     cookie: {
-        maxAge: 99999999
+        maxAge: 3600
     },
     saveUninitialized: true,
 }));

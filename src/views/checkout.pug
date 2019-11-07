@@ -85,9 +85,8 @@ html
             $("#amount").text(amount+ ' Sản Phẩm');
             $("#sum").text( ( Number(parseInt(amount)*parseInt(price.trim().replace(',','').replace(',',''))).toLocaleString().replace('.',',').replace('.',',') + 'VNĐ' ));
         }
-            $(document).ready(function(){
-                setTimeout(_=>{
-                    $(".loadingpage").css('display','none');
-                },1600); 
-            });
-
+        $(document).ready(function(){
+            setTimeout(_=>{
+                $(".loadingpage").css('display','none');
+            },1600); 
+        });
