@@ -27,15 +27,15 @@ html
                     .col-md-8
                         .main__cart__item.row
                             each value in cartUser
-                                .main__cart__item__all(onclick="onSelect( '" + value.img + "','" + value.price + "' , '" + value.amount + "' )" )
-                                    img(src=value.img).
+                                .main__cart__item__all
+                                    img(src=value.img onclick="onSelect( '" + value.img + "','" + value.price + "' , '" + value.amount + "' )" ).
                                     label #{value.nameproduct}
                                     span #{value.price} VNĐ
                                     .main__cart__item__all__button
                                         button(type='button')
                                             i(class='fas fa-minus')
                                         span() #{value.amount}
-                                        button(type='button')
+                                        button(type='button' onclick="onIncrease('"+value.id+"' )" )
                                             i(class='fas fa-plus')
                     .col-md-4
                         .main__cart__checkout.row
@@ -84,10 +84,21 @@ html
             $("#price").text(price + 'VNĐ');
             $("#amount").text(amount+ ' Sản Phẩm');
             $("#sum").text( ( Number(parseInt(amount)*parseInt(price.trim().replace(',','').replace(',',''))).toLocaleString().replace('.',',').replace('.',',') + 'VNĐ' ));
-        }
-            $(document).ready(function(){
-                setTimeout(_=>{
-                    $(".loadingpage").css('display','none');
-                },1600); 
+        };
+        function onIncrease(id){
+            $.post('/increase',{
+                id : id
+            },(data,status)=>{
+                if(status === 'success' ){
+                    let amount = $(".main__user__cart").text();
+                    $(".main__user__cart").text( parseInt(amount) + 1 );
+                }
             });
+        }
+        $(document).ready(function(){
+            setTimeout(_=>{
+                $(".loadingpage").css('display','none');
+            },1600);
+
+        });
 

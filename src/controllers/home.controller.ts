@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { HomeModel } from './../models/home.model';
 import { LoginModel } from "./../models/login.model";
 
-
 export class HomeController {
 
     constructor() {
@@ -88,6 +87,7 @@ export class HomeController {
         new HomeModel().getProduct(id, (product: any) => {
             if (product[0].id && userid) {
                 new HomeModel().saveProduct(userid, product[0].id, (result: any) => {
+                    req!.session!.cartUser = result;
                     let amount = 0;
                     for (let i = 0; i < result.length; i++) {
                         amount += result[i].cart;

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import { LoginModel } from "../models/login.model";
-
+import { CheckoutModel } from "./../models/checkout.model";
 export class CheckoutController {
 
     public checkOut(req: Request, res: Response) {
@@ -11,8 +10,13 @@ export class CheckoutController {
                     cartUser[i].price = Number(cartUser[i].price).toLocaleString();
                 };
             }
+            let sum = 0;
+            for (let i = 0; i < cartUser.length; i++) {
+                sum += cartUser[i].amount;
+            }
+            req!.session!.amount = sum;
             return res.render("./../views/checkout.pug", {
-                amount: req!.session!.amount,
+                amount: sum,
                 cartUser: cartUser,
                 title: "Checkout",
                 username: req!.session!.username
@@ -21,5 +25,41 @@ export class CheckoutController {
             res.redirect("/");
         }
     }
+
+    public onIncrease(req: Request, res: Response) {
+        const id = req!.body!.id;
+        new CheckoutModel().onIncrease(id, (result: any) => {
+            if (result.affectedRows === 1) {
+                let cartuser: any = req!.session!.cartUser;
+                new Promise((resolve, reject) => {
+                    for (let i = 0; i < cartuser.length; i++) {
+                        if (cartuser[i].id == id) {
+                            cartuser[i].amount += 1;
+                        }
+                    }
+                    resolve(cartuser);
+                }).then((data: any) => {
+                    let sum = 0;
+                    for (let i = 0; i < data.length; i++) {
+                        sum += data[i].amount;
+                    }
+                    req!.session!.cartUser = data;
+                    req!.session!.amount = sum;
+                });
+                res.json({
+                    code: 200,
+                    message: 'Success'
+                });
+            } else {
+                res.json({
+                    code: 404,
+                    message: 'Failed'
+                });
+            }
+        });
+
+
+    }
+
 }
 

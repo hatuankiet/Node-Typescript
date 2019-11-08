@@ -123,10 +123,10 @@ html
                 id: id
             },(data,status)=>{
                 if(status == 'success'){
-                    let product = data.product;
+                    let product = data.product; 
                     var amount = 0;
                     product.forEach(item=>{
-                        amount += item.cart;
+                        amount += item.amount;
                     });
                     $('.main__user__cart').text(amount);
                 };
@@ -142,7 +142,7 @@ html
                     return $(this).toggle( $(this).find("p").text().toLowerCase().indexOf(value) != -1  );
                 });
             });
-            $(".main_user").click(_=>{
+            $(".main_user > img").click(_=>{
                 window.location.href = "/checkout";
             });
         });
