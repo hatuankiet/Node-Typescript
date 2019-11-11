@@ -1,104 +1,147 @@
 
 doctype html
 html
-    head
-        title= title
-        include includes/head.pug
-    body
-        .loadingpage
-            .spinner
-                .double-bounce1
-                .double-bounce2
-        #mySidebar.sidebar
-            i(class='fas fa-minus-circle closebtn')
-            a(href='/') Home
-        #main
-            button( class='openbtn' ) ☰ Toggle Sidebar
-            if username
-                .main_user
-                    span.main__user__cart #{amount}
-                    img(src='img/cart.png')
-                    div
-                        img(src='img/user2.png')
-                        span #{username}
-                        a( onclick='onLogout(event)' class='main__logout' ) Logout
-            if cartUser            
-                .main__cart.row
-                    .col-md-8
-                        .main__cart__item.row
-                            each value in cartUser
-                                .main__cart__item__all
-                                    img(src=value.img onclick="onSelect( '" + value.img + "','" + value.price + "' , '" + value.amount + "' )" ).
-                                    label #{value.nameproduct}
-                                    span #{value.price} VNĐ
-                                    .main__cart__item__all__button
-                                        button(type='button')
-                                            i(class='fas fa-minus')
-                                        span() #{value.amount}
-                                        button(type='button' onclick="onIncrease('"+value.id+"' )" )
-                                            i(class='fas fa-plus')
-                    .col-md-4
-                        .main__cart__checkout.row
-                            p Thông tin đơn hàng
-                            img#img(src='http://vn-live.slatic.net/p/1402da0893f2d7def7b89cce48a0df22.jpg')
-                            .main__cart__checkout__info
-                                span Giá
-                                span#price 90000
-                                    span  VNĐ
-                            .main__cart__checkout__info
-                                span Số Lượng
-                                span#amount 1200000
-                            .main__cart__checkout__info
-                                span Tổng Cộng
-                                span#sum 1200000
-                                    span  VNĐ
-                            button(type='button') Xác Nhận Giỏ Hàng  
+  head
+    title= title
+    include includes/head.pug
+  body
+    .loadingcontroller
+      img(src='/img/loading.gif')
+    .loadingpage
+      .spinner
+        .double-bounce1
+        .double-bounce2
+    #mySidebar.sidebar
+      i(class='fas fa-minus-circle closebtn')
+      a(href='/') Home
+    #main
+      button( class='openbtn' ) ☰ Toggle Sidebar
+      if username
+        .main_user
+          span.main__user__cart #{amount}
+          img(src='img/cart.png')
+          div
+            img(src='img/user2.png')
+            span #{username}
+            a( onclick='onLogout(event)' class='main__logout' ) Logout
+      if cartUser            
+        .main__cart.row
+          .col-md-8
+            .main__cart__item.row
+              each value in cartUser
+                .main__cart__item__all
+                  img(src=value.img onclick="onSelect( '" + value.img + "','" + value.price + "' , '" + value.amount + "' )" ).
+                  label(onclick="onSelect( '" + value.img + "','" + value.price + "' , '" + value.amount + "' )" ) #{value.nameproduct}
+                  span(click="onCl(eee)") #{value.price} VNĐ
+                  .main__cart__item__all__button
+                    button(type='button' onclick="onDecrease('"+ value.id +"' , event )")
+                      i(class='fas fa-minus')
+                    span(class='amount') #{value.amount}
+                    button(type='button' onclick="onIncrease('"+ value.id +"' , event )" )
+                      i(class='fas fa-plus')
+          .col-md-4
+            .main__cart__checkout.row
+              p Thông tin đơn hàng
+              img#img(src='http://vn-live.slatic.net/p/1402da0893f2d7def7b89cce48a0df22.jpg')
+              .main__cart__checkout__info
+                span Giá
+                span#price 90000
+                  span  VNĐ
+              .main__cart__checkout__info
+                span Số Lượng
+                span#amount 1200000
+              .main__cart__checkout__info
+                span Tổng Cộng
+                span#sum 1200000
+                  span  VNĐ
+              button(type='button') Xác Nhận Giỏ Hàng  
 
 
 
 
-    include includes/footer.pug
-    script(type='text/javascript').
-        $('.openbtn').click(e=>{
-            const check = $('#mySidebar').css('width');
-            if( check != '0px' ){
-                $('#mySidebar').css({
-                    'width':'0',
-                });
-                $('#main').css('margin-left','0');
-            }else{
-                $('#mySidebar').css({
-                    'width':'250px'
-                });
-                $('#main').css('margin-left','250px');
-            }
+  include includes/footer.pug
+  script(type='text/javascript').
+    $('.openbtn').click(e=>{
+      const check = $('#mySidebar').css('width');
+      if( check != '0px' ){
+        $('#mySidebar').css({
+          'width':'0',
         });
-        $('.closebtn').click(e=>{
-            $('#mySidebar').css({
-                'width':'0'
-            });
-            $('#main').css('margin-left','0');
+        $('#main').css('margin-left','0');
+      }else{
+        $('#mySidebar').css({
+          'width':'250px'
         });
-        function onSelect(img,price,amount){
-            $("#img").attr("src",img);
-            $("#price").text(price + 'VNĐ');
-            $("#amount").text(amount+ ' Sản Phẩm');
-            $("#sum").text( ( Number(parseInt(amount)*parseInt(price.trim().replace(',','').replace(',',''))).toLocaleString().replace('.',',').replace('.',',') + 'VNĐ' ));
-        };
-        function onIncrease(id){
-            $.post('/increase',{
-                id : id
-            },(data,status)=>{
-                if(status === 'success' ){
-                    let amount = $(".main__user__cart").text();
-                    $(".main__user__cart").text( parseInt(amount) + 1 );
-                }
-            });
+        $('#main').css('margin-left','250px');
+      }
+    });
+    $('.closebtn').click(e=>{
+      $('#mySidebar').css({
+        'width':'0'
+      });
+      $('#main').css('margin-left','0');
+    });
+    function onSelect(img,price,amount){
+      $("#img").attr("src",img);
+      $("#price").text(price + 'VNĐ');
+      $("#amount").text(amount+ ' Sản Phẩm');
+      $("#sum").text( ( Number(parseInt(amount)*parseInt(price.trim().replace(',','').replace(',',''))).toLocaleString().replace('.',',').replace('.',',') + 'VNĐ' ));
+    };
+    async function onIncrease(id,event){
+      $(".loadingcontroller").css('display','block');
+      let cart = event.currentTarget.parentElement.childNodes[1];
+      let amountItem = cart.innerText ;
+      let amount = $(".main__user__cart").text();
+      var awaitMe = new Promise(async (resolve,reject)=>{
+        resolve(200);
+      }).then(async data=>{
+        if(data === 200){
+          axios.post('/increase',{
+            id : id
+          }).then(res=>{
+            $(".main__user__cart").text( parseInt(amount) + 1 );
+              cart.innerText = parseInt(amountItem) + 1;
+              setTimeout(_=>{
+                $(".loadingcontroller").css('display','none');
+              },1000);
+          });
+        }else{
+          await awaitMe;
         }
-        $(document).ready(function(){
-            setTimeout(_=>{
-                $(".loadingpage").css('display','none');
-            },1600);
-
-        });
+      });
+    }
+    async function onDecrease(id,event){
+      $(".loadingcontroller").css('display','block');
+      let cart = event.currentTarget.parentElement.childNodes[1];
+      let amountItem = cart.innerText ;
+      let amount = $(".main__user__cart").text();
+      var awaitMe = new Promise(async (resolve,reject)=>{
+        resolve(200);
+      }).then(async data=>{
+        if(data === 200){
+          axios.post('/decrease',{
+            id : id
+          }).then(res=>{
+            $(".main__user__cart").text( parseInt(amount) - 1 );
+              cart.innerText = parseInt(amountItem) - 1;
+              setTimeout(_=>{
+                $(".loadingcontroller").css('display','none');
+              },1000);
+          });
+        }else{
+          await awaitMe;
+        }
+      });
+    }
+    
+    $(document).ready(function(){
+      //- const axios = require('img/cart.png');
+      //- console.log( axios );
+      axios.get('https://dog.ceo/api/breeds/list/all').then(res=>{
+        console.log(res.data);
+      });
+      setTimeout(_=>{
+        $(".loadingpage").css('display','none');
+      },1600);
+    });
 

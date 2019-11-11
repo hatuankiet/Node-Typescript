@@ -10,14 +10,19 @@ export class HomeController {
     public index(req: Request, res: Response) {
         if (req!.session!.username) {
             new HomeModel().productList((data: any) => {
+                var cartUser: any = req!.session!.cartUser;
                 for (let i = 0; i < data.length; i++) {
                     data[i].price = Number(data[i].price).toLocaleString();
                 };
+                let sum = 0;
+                for (let i = 0; i < cartUser.length; i++) {
+                    sum += cartUser[i].amount;
+                }
                 return res.render("./../views/home.pug", {
                     title: "Home",
                     listproduct: data,
                     username: req!.session!.username,
-                    amount: req!.session!.amount
+                    amount: sum
                 });
             });
         } else {
