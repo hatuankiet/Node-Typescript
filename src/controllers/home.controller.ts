@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { HomeModel } from './../models/home.model';
 import { LoginModel } from "./../models/login.model";
 
-
 export class HomeController {
 
     constructor() {
@@ -11,14 +10,19 @@ export class HomeController {
     public index(req: Request, res: Response) {
         if (req!.session!.username) {
             new HomeModel().productList((data: any) => {
+                var cartUser: any = req!.session!.cartUser;
                 for (let i = 0; i < data.length; i++) {
                     data[i].price = Number(data[i].price).toLocaleString();
                 };
+                let sum = 0;
+                for (let i = 0; i < cartUser.length; i++) {
+                    sum += cartUser[i].amount;
+                }
                 return res.render("./../views/home.pug", {
                     title: "Home",
                     listproduct: data,
                     username: req!.session!.username,
-                    amount: req!.session!.amount
+                    amount: sum
                 });
             });
         } else {
@@ -88,6 +92,7 @@ export class HomeController {
         new HomeModel().getProduct(id, (product: any) => {
             if (product[0].id && userid) {
                 new HomeModel().saveProduct(userid, product[0].id, (result: any) => {
+                    req!.session!.cartUser = result;
                     let amount = 0;
                     for (let i = 0; i < result.length; i++) {
                         amount += result[i].cart;
