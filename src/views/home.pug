@@ -1,151 +1,151 @@
 
 doctype html
 html
-    head
-        title= title
-        include includes/head.pug
-    body
-        .loadingpage
-            .spinner
-                .double-bounce1
-                .double-bounce2
-        .home__modal
-            form(action='' method='POST')#login
-                .home__intro
-                    i( class='fas fa-sign-in-alt')
-                    h2 WelCome To Shopping
-                    span#error-login
-                .groupLogin
-                    label UserName
-                    input(type='text' id="username" name='username' placeholder='Nhập username...' ).
-                .groupLogin
-                    label Password
-                    input(type='text' id="password" name='password' placeholder='Nhập password...' ).
-                .groupLogin
-                    button(type='submit' ) Đăng Nhập
+  head
+    title= title
+    include includes/head.pug
+  body
+    .loadingpage
+      .spinner
+        .double-bounce1
+        .double-bounce2
+    .home__modal
+      form(action='' method='POST')#login
+        .home__intro
+          i( class='fas fa-sign-in-alt')
+          h2 WelCome To Shopping
+          span#error-login
+        .groupLogin
+          label UserName
+          input(type='text' id="username" name='username' placeholder='Nhập username...' ).
+        .groupLogin
+          label Password
+          input(type='text' id="password" name='password' placeholder='Nhập password...' ).
+        .groupLogin
+          button(type='submit' ) Đăng Nhập
 
-        #mySidebar.sidebar
-            i(class='fas fa-minus-circle closebtn')
-            if !username
-                a(href='#' onclick="openLogin(event)" ) Login
-                a(href='#') Register
-            a(href='#') Cart
-            a(href='#') Contact
-        #main
-            button( class='openbtn' ) ☰ Toggle Sidebar
-            if username
-                .main_user
-                    span.main__user__cart #{amount}
-                    img(src='img/cart.png')
-                    div
-                        img(src='img/user2.png')
-                        span #{username}
-                        a( onclick='onLogout(event)' class='main__logout' ) Logout
-            .main_search
-                form(action='' method='')#search
-                    input(type='text' placeholder='tim kiem...' )
-                    button( type='button')
-                        img(src='https://images-na.ssl-images-amazon.com/images/I/41HeL2cy9LL._SY355_.png')
-            .main__listproduct
-                if listproduct.length > 0
-                    each val in listproduct
-                        .product
-                            img(src=val.img)
-                            p= val.nameproduct
-                            span= val.price
-                            button(type='button' onclick=`onBuy(${val.id})`)
-                                i(class='fas fa-shopping-cart') Mua hàng
+    #mySidebar.sidebar
+      i(class='fas fa-minus-circle closebtn')
+      if !username
+        a(href='#' onclick="openLogin(event)" ) Login
+        a(href='#') Register
+      a(href='#') Cart
+      a(href='#') Contact
+    #main
+      button( class='openbtn' ) ☰ Toggle Sidebar
+      if username
+        .main_user
+          span.main__user__cart #{amount}
+          img(src='img/cart.png')
+          div
+            img(src='img/user2.png')
+            span #{username}
+            a( onclick='onLogout(event)' class='main__logout' ) Logout
+      .main_search
+        form(action='' method='')#search
+          input(type='text' placeholder='tim kiem...' )
+          button( type='button')
+            img(src='https://images-na.ssl-images-amazon.com/images/I/41HeL2cy9LL._SY355_.png')
+      .main__listproduct
+        if listproduct.length > 0
+          each val in listproduct
+            .product
+              img(src=val.img)
+              p= val.nameproduct
+              span #{val.price} VNĐ
+              button(type='button' onclick=`onBuy(${val.id})`)
+                i(class='fas fa-shopping-cart') Mua hàng
 
 
     include includes/footer.pug
     script(type='text/javascript').
-        $('.openbtn').click(e=>{
-            const check = $('#mySidebar').css('width');
-            if( check != '0px' ){
-                $('#mySidebar').css({
-                    'width':'0',
-                });
-                $('#main').css('margin-left','0');
-            }else{
-                $('#mySidebar').css({
-                    'width':'250px'
-                });
-                $('#main').css('margin-left','250px');
-            }
-        });
-        $('.closebtn').click(e=>{
-            $('#mySidebar').css({
-                'width':'0'
-            });
-            $('#main').css('margin-left','0');
-        });
-        function openLogin(e){
-            e.preventDefault();
-            $('.home__modal').slideToggle() ;
+      $('.openbtn').click(e=>{
+        const check = $('#mySidebar').css('width');
+        if( check != '0px' ){
+          $('#mySidebar').css({
+            'width':'0',
+          });
+          $('#main').css('margin-left','0');
+        }else{
+          $('#mySidebar').css({
+            'width':'250px'
+          });
+          $('#main').css('margin-left','250px');
         }
-        window.onclick = function(e){
-            if(e.target == $('.home__modal')[0] ){
-                $('.home__modal').css('display','none');
-            }
-        };
-        $('#login').submit(function(e) {
-            event.preventDefault();
-            $.ajax({
-                url: '/login',
-                method: 'POST',
-                data: {
-                    username: $('#username').val(),
-                    password: $('#password').val(),
-                },
-                success: function(data) {
-                    if(data.code === 200){
-                        window.location.href = "/";
-                    }
-                }
-            });
+      });
+      $('.closebtn').click(e=>{
+        $('#mySidebar').css({
+          'width':'0'
         });
+        $('#main').css('margin-left','0');
+      });
+      function openLogin(e){
+        e.preventDefault();
+        $('.home__modal').slideToggle() ;
+      }
+      window.onclick = function(e){
+        if(e.target == $('.home__modal')[0] ){
+          $('.home__modal').css('display','none');
+        }
+      };
+      $('#login').submit(function(e) {
+        event.preventDefault();
+        $.ajax({
+          url: '/login',
+          method: 'POST',
+          data: {
+            username: $('#username').val(),
+            password: $('#password').val(),
+          },
+          success: function(data) {
+            if(data.code === 200){
+              window.location.href = "/";
+            }
+          }
+        });
+      });
         (function(){
-            const user = $('.main_user')[0];
-            if(user){
-                $('.home__modal').css('display','none');
-            }
+          const user = $('.main_user')[0];
+          if(user){
+            $('.home__modal').css('display','none');
+          }
         })();
-        function onLogout(e){
-            event.preventDefault();
-            $.get("/logout",function(data){
-                if(data.code === 200){
-                    window.location.href = "/";
-                }
-            });
-        };
-        function onBuy(id){
-            $.post("/buy",{
-                id: id
-            },(data,status)=>{
-                if(status == 'success'){
-                    let product = data.product;
-                    var amount = 0;
-                    product.forEach(item=>{
-                        amount += item.cart;
-                    });
-                    $('.main__user__cart').text(amount);
-                };
-            });
-        }
-        $(document).ready(function(){
-            setTimeout(_=>{
-                $(".loadingpage").css('display','none');
-            },1600);
-            $("#search input").on("keyup",function(){
-                var value = $(this).val().toLowerCase();
-                $(".main__listproduct .product").filter(function(){
-                    return $(this).toggle( $(this).find("p").text().toLowerCase().indexOf(value) != -1  );
-                });
-            });
-            $(".main_user").click(_=>{
-                window.location.href = "/checkout";
-            });
+      function onLogout(e){
+        event.preventDefault();
+        $.get("/logout",function(data){
+          if(data.code === 200){
+            window.location.href = "/";
+          }
         });
+      };
+      function onBuy(id){
+        $.post("/buy",{
+          id: id
+        },(data,status)=>{
+          if(status == 'success'){
+            let product = data.product; 
+            var amount = 0;
+            product.forEach(item=>{
+              amount += item.amount;
+            });
+            $('.main__user__cart').text(amount);
+          };
+        });
+        }
+      $(document).ready(function(){
+        setTimeout(_=>{
+          $(".loadingpage").css('display','none');
+        },1600);
+        $("#search input").on("keyup",function(){
+          var value = $(this).val().toLowerCase();
+          $(".main__listproduct .product").filter(function(){
+            return $(this).toggle( $(this).find("p").text().toLowerCase().indexOf(value) != -1  );
+          });
+        });
+        $(".main_user > img").click(_=>{
+          window.location.href = "/checkout";
+        });
+      });
 
 
 

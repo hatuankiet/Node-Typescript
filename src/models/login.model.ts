@@ -7,7 +7,7 @@ export class LoginModel {
         let query = "SELECT * FROM users WHERE username= ? AND password=?";
         let params = [username, password];
         ConnectDB.querySQL(query, params, (results: any) => {
-            const queryUserData = `SELECT nameproduct,price,img,amount,productid,userid FROM product INNER JOIN cartuser ON product.id = cartuser.productid HAVING userid = ${results[0].id} `;
+            const queryUserData = `SELECT cartuser.id,nameproduct,price,img,amount,productid,userid FROM product INNER JOIN cartuser ON product.id = cartuser.productid HAVING userid = ${results[0].id} `;
             ConnectDB.querySQL(queryUserData, null, (cart: any) => {
                 callback(results, cart);
             });

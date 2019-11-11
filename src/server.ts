@@ -49,7 +49,8 @@ app.get("/logout", new HomeController().logOut);
 app.post("/buy", new HomeController().onBuyProduct);
 // Checkout
 app.get("/checkout", new CheckoutController().checkOut);
-
+app.post("/increase", new CheckoutController().onIncrease);
+app.post("/decrease", new CheckoutController().onDecrease);
 
 app.listen(3000, () => {
     // tslint:disable-next-line: no-console
